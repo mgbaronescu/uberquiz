@@ -46,7 +46,7 @@ let questions = [
 ]
 const SCORE_POINTS = 100
 const MAX_QUESTIONS = 4
- startGame = () => {
+startGame = () => {
   questionCounter = 0
   score = 0
   availableQuestions = [...questions]
@@ -60,14 +60,18 @@ getNewQquestion = () => {
   }
   questionCounter++
   progressText.innerText = `Question ${questionCounter} of ${MAX_QUESTIONS}`
+
   progressBarFull.style.width = ` ${(questionCounter / MAX_QUESTIONS) * 100}%`
+
   const questionsIndex = Math.floor(Math.random() * availableQuestions.length)
   currentQuestion = availableQuestions[questionsIndex]
   question.innerText = currentQuestion.question
+
   choices.forEach(choice => {
     const number = choice.dataset['number']
     choice.innerText = currentQuestion['choice' + number]
   })
+
   availableQuestions.splice(questionsIndex, 1)
 
   acceptingAnswers = true
@@ -76,9 +80,11 @@ getNewQquestion = () => {
 choices.forEach(choice => {
   choices.addEventListener('click', e => {
     if (!acceptingAnswers) return
+
     acceptingAnswers = false
     const selectedChoice = e.target
     const selectedAnswer = selectedChoice.dataset['number']
+
     let classtoApply =
       selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect'
     if (classtoApply === 'correct') {
@@ -88,7 +94,8 @@ choices.forEach(choice => {
     selectedChoice.parentElement.classList.add(classtoApply)
     setTimeout(() => {
       selectedChoice.parentElement.classList.remove(classtoApply)
-    }, 100)
+      getNewQquestion()
+    }, 1000)
   })
 })
 
